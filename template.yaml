@@ -54,6 +54,9 @@ Resources:
       Domain: !Ref CognitoUserPoolDomainName
 
 Outputs:
-  CongnitoUserPoolURL:
+  UserPoolId:
+    Description: User Pool ID
+    Value: !Ref CognitoUserPool
+  UserPoolURL:
     Description: URI to be used to setup external federated IDPs
     Value: !Sub https://${CognitoUserPoolDomain}.auth.${AWS::Region}.amazoncognito.com
