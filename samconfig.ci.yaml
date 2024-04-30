@@ -5,27 +5,23 @@ default:
       cached: 'true'
       parallel: 'true'
 
-  deploy:
-    parameters:
-      stack_name: cognito-api-gateway
-      s3_bucket: aws-sam-cli-managed-besta-sandbox-artifactsbucket-1lleoj45qsfem
-      capabilities: CAPABILITY_IAM
-      image_repositories: []
-
 sandbox:
   deploy:
     parameters:
+      stack_name: cognito-api-gateway
       parameter_overrides:
         - "CognitoUserPoolDomainName=andmoredev-sandbox"
 
 qa:
   deploy:
     parameters:
+      stack_name: cognito-api-gateway
       parameter_overrides:
         - "CognitoUserPoolDomainName=andmoredev-qa"
 
 prod:
   deploy:
     parameters:
+      stack_name: cognito-api-gateway
       parameter_overrides:
         - "CognitoUserPoolDomainName=andmoredev"
