@@ -53,27 +53,6 @@ Resources:
       UserPoolId: !Ref CognitoUserPool
       Domain: !Ref CognitoUserPoolDomainName
 
-  PostmanResourceServer:
-    Type: AWS::Cognito::UserPoolResourceServer
-    Properties:
-      UserPoolId: !Ref CognitoUserPool
-      Identifier: test
-      Name: Automation
-      Scopes:
-        - ScopeName: postman
-          ScopeDescription: Scope used to test endpoints with postman
-
-  CognitoTestAutomationClient:
-    Type: AWS::Cognito::UserPoolClient
-    Properties:
-      UserPoolId: !Ref CognitoUserPool
-      GenerateSecret: true
-      AllowedOAuthFlows:
-        - client_credentials
-      AllowedOAuthScopes:
-        - test/postman
-      AllowedOAuthFlowsUserPoolClient: true
-
 Outputs:
   CongnitoUserPoolURL:
     Description: URI to be used to setup external federated IDPs
