@@ -60,12 +60,12 @@ Resources:
       Type: String
       Value: !Ref CognitoUserPool
 
-  CognitoUserPoolURLParameter:
+  CognitoUserPoolArnParameter:
     Type: AWS::SSM::Parameter
     Properties:
-      Name: !Sub /${AWS::StackName}/CognitoUserPoolURL
+      Name: !Sub /${AWS::StackName}/CognitoUserPoolArn
       Type: String
-      Value: !Sub https://${CognitoUserPoolDomain}.auth.${AWS::Region}.amazoncognito.com/
+      Value: !GetAtt CognitoUserPool.Arn
 
 Outputs:
   UserPoolId:
