@@ -41,3 +41,13 @@ jobs:
           --s3-bucket ${{ secrets.ARTIFACTS_BUCKET_NAME }} \
           --no-fail-on-empty-changeset \
           --role-arn ${{ secrets.CLOUDFORMATION_EXECUTION_ROLE }}
+
+      - name: Get Stack Outputs
+        run: |
+          stackOutputJson=$(aws cloudformation describe-stacks --output json --stack-name $STACK_NAME --query "Stacks[0].Outputs")
+          userPoolId=$(echo $stackOutputJson | jq -r '.[] | select(.OutputKey=="UserPoolId") | .OutputValue')
+          userPoolUrl=$(echo $stackOutputJson | jq -r '.[] | select(.OutputKey=="UserPoolURL") | .OutputValue')
+
+          echo "# Cognito" >> $GITHUB_STEP_SUMMARY
+          echo "* User Pool Id - $userPoolId" >> $GITHUB_STEP_SUMMARY
+          echo "* User Pool URL - $userPoolUrl" >> $GITHUB_STEP_SUMMARY
