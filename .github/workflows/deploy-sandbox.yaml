@@ -1,4 +1,4 @@
-name: Deploy Backend
+name: Deploy Sandbox
 
 on:
   workflow_dispatch:
@@ -14,6 +14,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    environment: sandbox
     steps:
       - uses: actions/checkout@v4
 
@@ -21,16 +22,13 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: us-east-1
-          role-to-assume: ${{ vars.PIPELINE_EXECUTION_ROLE }}
+          role-to-assume: ${{ secrets.PIPELINE_EXECUTION_ROLE }}
           role-session-name: sam-deploy
           role-duration-seconds: 3600
           role-skip-session-tagging: true
 
       - name: SAM Build and Deploy
         run: |
-          npm install -g esbuild
-          npm ci
-
           sam --info
 
           sam build \
@@ -40,6 +38,6 @@ jobs:
           sam deploy \
           --config-file samconfig.ci.toml \
           --config-env sandbox \
-          --s3-bucket ${{ vars.ARTIFACTS_BUCKET_NAME }} \
+          --s3-bucket ${{ secrets.ARTIFACTS_BUCKET_NAME }} \
           --no-fail-on-empty-changeset \
-          --role-arn ${{ vars.CLOUDFORMATION_EXECUTION_ROLE }}
+          --role-arn ${{ secrets.CLOUDFORMATION_EXECUTION_ROLE }}
