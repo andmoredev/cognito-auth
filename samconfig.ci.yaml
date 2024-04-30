@@ -8,20 +8,20 @@ default:
 sandbox:
   deploy:
     parameters:
-      stack_name: cognito-api-gateway
+      stack_name: andmoredev-auth
       parameter_overrides:
         - "CognitoUserPoolDomainName=andmoredev-sandbox"
 
 qa:
   deploy:
     parameters:
-      stack_name: cognito-api-gateway
+      stack_name: andmoredev-auth
       parameter_overrides:
         - "CognitoUserPoolDomainName=andmoredev-qa"
 
 prod:
   deploy:
     parameters:
-      stack_name: cognito-api-gateway
+      stack_name: andmoredev-auth
       parameter_overrides:
         - "CognitoUserPoolDomainName=andmoredev"
