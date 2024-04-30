@@ -32,11 +32,11 @@ jobs:
           sam --info
 
           sam build \
-          --config-file samconfig.ci.toml \
+          --config-file samconfig.ci.yaml \
           --config-env sandbox
 
           sam deploy \
-          --config-file samconfig.ci.toml \
+          --config-file samconfig.ci.yaml \
           --config-env sandbox \
           --s3-bucket ${{ secrets.ARTIFACTS_BUCKET_NAME }} \
           --no-fail-on-empty-changeset \
