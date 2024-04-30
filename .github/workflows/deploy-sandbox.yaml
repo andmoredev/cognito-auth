@@ -10,6 +10,9 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  STACK_NAME: andmoredev-auth
+
 jobs:
   deploy:
     name: Deploy
@@ -36,6 +39,7 @@ jobs:
           --config-env sandbox
 
           sam deploy \
+          --stack-name $STACK_NAME \
           --config-file samconfig.ci.yaml \
           --config-env sandbox \
           --s3-bucket ${{ secrets.ARTIFACTS_BUCKET_NAME }} \
