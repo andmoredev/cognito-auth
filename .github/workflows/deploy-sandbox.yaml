@@ -1,0 +1,45 @@
+name: Deploy Backend
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref_name }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: ${{ vars.PIPELINE_EXECUTION_ROLE }}
+          role-session-name: sam-deploy
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+
+      - name: SAM Build and Deploy
+        run: |
+          npm install -g esbuild
+          npm ci
+
+          sam --info
+
+          sam build \
+          --config-file samconfig.ci.toml \
+          --config-env sandbox
+
+          sam deploy \
+          --config-file samconfig.ci.toml \
+          --config-env sandbox \
+          --s3-bucket ${{ vars.ARTIFACTS_BUCKET_NAME }} \
+          --no-fail-on-empty-changeset \
+          --role-arn ${{ vars.CLOUDFORMATION_EXECUTION_ROLE }}

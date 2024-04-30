@@ -1,0 +1,80 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: cognito-api-gateway
+Transform:  AWS::Serverless-2016-10-31
+
+Metadata:
+  esbuild-properties: &esbuild-properties
+    Format: esm
+    Minify: false
+    OutExtension:
+      - .js=.mjs
+    Target: es2020
+    Sourcemap: false
+    EntryPoints:
+      - index.mjs
+    Banner:
+      - js=import { createRequire } from 'module'; const require = createRequire(import.meta.url);
+    External:
+      - '@aws-sdk/*'
+
+  esbuild: &esbuild
+    BuildMethod: esbuild
+    BuildProperties: *esbuild-properties
+
+Parameters:
+  CognitoUserPoolDomainName:
+    Type: String
+    Description: The domain name for the Cognito User Pool
+
+Globals:
+  Function:
+    Timeout: 10
+    Runtime: nodejs20.x
+    MemorySize: 768
+    Tracing: Active
+    Handler: index.handler
+    Architectures:
+      - arm64
+    Environment:
+      Variables:
+        AWS_ACCOUNT_ID: !Sub ${AWS::AccountId}
+        POWERTOOLS_SERVICE_NAME: congito-api-gateway-service
+        POWERTOOLS_METRICS_NAMESPACE: congito-api-gateway
+
+Resources:
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+
+  CognitoUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      UserPoolId: !Ref CognitoUserPool
+      Domain: !Ref CognitoUserPoolDomainName
+
+  PostmanResourceServer:
+    Type: AWS::Cognito::UserPoolResourceServer
+    Properties:
+      UserPoolId: !Ref CognitoUserPool
+      Identifier: test
+      Name: Automation
+      Scopes:
+        - ScopeName: postman
+          ScopeDescription: Scope used to test endpoints with postman
+
+  CognitoTestAutomationClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref CognitoUserPool
+      GenerateSecret: true
+      AllowedOAuthFlows:
+        - client_credentials
+      AllowedOAuthScopes:
+        - test/postman
+      AllowedOAuthFlowsUserPoolClient: true
+
+Outputs:
+  CongnitoUserPoolURL:
+    Description: URI to be used to setup external federated IDPs
+    Value: !Sub https://${CognitoUserPoolDomain}.auth.${AWS::Region}.amazoncognito.com
