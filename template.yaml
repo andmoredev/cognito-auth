@@ -42,7 +42,7 @@ Globals:
         POWERTOOLS_METRICS_NAMESPACE: congito-api-gateway
 
 Resources:
-  CognitoUserPool:
+  CognitoUserPoolWithEmail:
     Type: AWS::Cognito::UserPool
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
@@ -70,7 +70,7 @@ Resources:
   CognitoUserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
-      UserPoolId: !Ref CognitoUserPool
+      UserPoolId: !Ref CognitoUserPoolWithEmail
       Domain: !Ref CognitoUserPoolDomainName
 
   CognitoUserPoolIdParameter:
@@ -78,19 +78,19 @@ Resources:
     Properties:
       Name: !Sub /${AWS::StackName}/CognitoUserPoolId
       Type: String
-      Value: !Ref CognitoUserPool
+      Value: !Ref CognitoUserPoolWithEmail
 
   CognitoUserPoolArnParameter:
     Type: AWS::SSM::Parameter
     Properties:
       Name: !Sub /${AWS::StackName}/CognitoUserPoolArn
       Type: String
-      Value: !GetAtt CognitoUserPool.Arn
+      Value: !GetAtt CognitoUserPoolWithEmail.Arn
 
 Outputs:
   UserPoolId:
     Description: User Pool ID
-    Value: !Ref CognitoUserPool
+    Value: !Ref CognitoUserPoolWithEmail
   UserPoolURL:
     Description: URI to be used to setup external federated IDPs
     Value: !Sub https://${CognitoUserPoolDomain}.auth.${AWS::Region}.amazoncognito.com
