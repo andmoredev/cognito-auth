@@ -46,6 +46,26 @@ Resources:
     Type: AWS::Cognito::UserPool
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
+    Properties:
+      UsernameAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      Schema:
+        - AttributeDataType: String
+          Name: email
+          Required: false
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_LINK
+      EmailConfiguration:
+        EmailSendingAccount: COGNITO_DEFAULT
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: false
 
   CognitoUserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
