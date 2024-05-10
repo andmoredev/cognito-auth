@@ -67,11 +67,11 @@ Resources:
           RequireNumbers: true
           RequireSymbols: false
 
-  CognitoUserPoolDomain:
-    Type: AWS::Cognito::UserPoolDomain
-    Properties:
-      UserPoolId: !Ref CognitoUserPoolWithEmail
-      Domain: !Ref CognitoUserPoolDomainName
+  # CognitoUserPoolDomain:
+  #   Type: AWS::Cognito::UserPoolDomain
+  #   Properties:
+  #     UserPoolId: !Ref CognitoUserPoolWithEmail
+  #     Domain: !Ref CognitoUserPoolDomainName
 
   CognitoUserPoolIdParameter:
     Type: AWS::SSM::Parameter
@@ -91,6 +91,6 @@ Outputs:
   UserPoolId:
     Description: User Pool ID
     Value: !Ref CognitoUserPoolWithEmail
-  UserPoolURL:
-    Description: URI to be used to setup external federated IDPs
-    Value: !Sub https://${CognitoUserPoolDomain}.auth.${AWS::Region}.amazoncognito.com
+  # UserPoolURL:
+  #   Description: URI to be used to setup external federated IDPs
+  #   Value: !Sub https://${CognitoUserPoolDomain}.auth.${AWS::Region}.amazoncognito.com
