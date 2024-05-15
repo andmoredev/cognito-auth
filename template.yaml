@@ -67,15 +67,17 @@ Resources:
           RequireNumbers: true
           RequireSymbols: true
 
-  CognitoUserPool2:
-    Type: AWS::Cognito::UserPool
-    DeletionPolicy: Delete
-    UpdateReplacePolicy: Delete
-    Properties:
-      VerificationMessageTemplate:
-        DefaultEmailOption: CONFIRM_WITH_LINK
-      EmailConfiguration:
-        EmailSendingAccount: COGNITO_DEFAULT
+  # CognitoUserPool2:
+  #   Type: AWS::Cognito::UserPool
+  #   DeletionPolicy: Delete
+  #   UpdateReplacePolicy: Delete
+  #   Properties:
+  #     UsernameAttributes:
+  #       - email
+  #     VerificationMessageTemplate:
+  #       DefaultEmailOption: CONFIRM_WITH_LINK
+  #     EmailConfiguration:
+  #       EmailSendingAccount: COGNITO_DEFAULT
 
   CognitoUserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
