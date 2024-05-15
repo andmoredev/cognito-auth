@@ -65,7 +65,17 @@ Resources:
           RequireUppercase: true
           RequireLowercase: true
           RequireNumbers: true
-          RequireSymbols: false
+          RequireSymbols: true
+
+  CognitoUserPool2:
+    Type: AWS::Cognito::UserPool
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_LINK
+      EmailConfiguration:
+        EmailSendingAccount: COGNITO_DEFAULT
 
   CognitoUserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
